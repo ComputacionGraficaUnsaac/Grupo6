@@ -16,7 +16,6 @@ def bomba(xc, yc):
 		Circle8v(xc, yc, k, 100/255, 100/255, 100/255, 1)
 	DDA(xc+8, yc+8, xc+14, yc+14, 255/255, 200/255, 0/255, 3)
 	set_pixel( xc+14,yc+14,255/255, 0/255, 0/255, 4)
-
 	
 def explocion(xc, yc):
 	posx=xc%100
@@ -78,7 +77,6 @@ def main():
 	pygame.display.set_caption('C.G. I')
 	display_openGL(width, height, scale)
 
-
 	mapa()
 	xr=-450
 	yr=250
@@ -86,7 +84,6 @@ def main():
 	xv=450
 	yv=-250
 	personajeVerde(xv,yv)
-
 
 	print("Finish...")
 	glFlush()
@@ -165,7 +162,6 @@ def main():
 					print("K_m")
 					bomba(xv,yv)
 					glFlush()
-
 			
 #cambio123456
 
