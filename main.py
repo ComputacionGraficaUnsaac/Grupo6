@@ -31,7 +31,7 @@ def explocion(xc, yc, datos):
 
 	set_pixel( xc,yc,255/255, 0/255, 0/255, 4)
 	glFlush()
-	pygame.time.delay(100)
+	pygame.time.wait(100)
 	R=False
 	V=False
 	if(xc == datos[0][0] or yc == datos[0][1]):
@@ -46,8 +46,7 @@ def explocion(xc, yc, datos):
 				print("win red")
 			else:
 				print("win green")
-		clearCanvas()
-		pygame.time.delay(3000)
+		pygame.time.wait(3000)
 def limpiar_explo(xc, yc):
 	posx=xc%100
 	posy=yc%100
