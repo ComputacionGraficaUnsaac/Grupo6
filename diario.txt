@@ -1,2 +1,3 @@
 07Oct - nada
 14Oct - presentacion de idea de juego
+23Oct - corre el juego. paralelizan. adecuaron sus necesidades al tiempo. (pendiente revisión de Github). Tienen menu de inicio.
