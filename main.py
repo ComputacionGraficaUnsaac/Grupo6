@@ -5,6 +5,8 @@
 # Python 3.8
 
 from utils import *
+from pygame.locals import *
+import numpy as np
 
 scale = 1 
 """ no cambiar la escala de 1 """
@@ -18,7 +20,7 @@ def bomba(xc, yc):
 	set_pixel( xc+14,yc+14,255/255, 0/255, 0/255, 4)
 
 	
-def explocion(xc, yc):
+def explocion(xc, yc, datos):
 	posx=xc%100
 	posy=yc%100
 	if(posx == 50 or posx == -50):
@@ -28,7 +30,35 @@ def explocion(xc, yc):
 		DDA(-450,yc,450,yc, 255/255, 100/255, 0/255, 40)
 
 	set_pixel( xc,yc,255/255, 0/255, 0/255, 4)
-
+	glFlush()
+	pygame.time.delay(100)
+	R=False
+	V=False
+	if(xc == datos[0][0] or yc == datos[0][1]):
+		R=True
+	if(xc == datos[1][0] or yc == datos[1][1]):
+		V=True
+	if(R or V):
+		if(R and V):
+			print("no winner")
+		else:
+			if(V):
+				print("win red")
+			else:
+				print("win green")
+		clearCanvas()
+		pygame.time.delay(3000)
+def limpiar_explo(xc, yc):
+	posx=xc%100
+	posy=yc%100
+	if(posx == 50 or posx == -50):
+		DDA(xc,250,xc,-250, 0/255, 0/255, 0/255, 40)
+	
+	if(posy == 50 or posy == -50):
+		DDA(-450,yc,450,yc, 0/255, 0/255, 0/255, 40)
+def clearCanvas():
+	glClearColor(0.0, 0.0, 0.0, 1.0)
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 def mapa():
 	#bordes
 	x=487.5
@@ -55,7 +85,6 @@ def personajeRojo(xc, yc):
 	#tronco
 	DDA(xc, yc+7, xc, yc-17, 255/255, 0/255, 0/255, 15)
 	DDA(xc, yc-5, xc, yc-25, 0/255, 0/255, 0/255, 1)
-	glFlush()
 
 def personajeVerde(xc, yc):
 	#cabeza
@@ -70,6 +99,12 @@ def personajeVerde(xc, yc):
 	#tronco
 	DDA(xc, yc+7, xc, yc-17, 0/255, 110/255, 10/255, 15)
 	DDA(xc, yc-5, xc, yc-25, 0/255, 0/255, 0/255, 1)
+
+def Refresh(datos):
+	personajeRojo(datos[0][0],datos[0][1])
+	personajeVerde(datos[1][0],datos[1][1])
+	bomba(datos[2][0],datos[2][1])
+	bomba(datos[3][0],datos[3][1])
 	glFlush()
 
 def main():
@@ -78,14 +113,16 @@ def main():
 	pygame.display.set_caption('C.G. I')
 	display_openGL(width, height, scale)
 
-
+	datos =[
+		[-450, 250],#personaje rojo
+		[ 450,-250],#personade verde
+		[1000,1000],#bomba rojo
+		[1000,1000],#bomba verde
+	]
 	mapa()
-	xr=-450
-	yr=250
-	personajeRojo(xr,yr)
-	xv=450
-	yv=-250
-	personajeVerde(xv,yv)
+	personajeRojo(datos[0][0],datos[0][1])
+	personajeVerde(datos[1][0],datos[1][1])
+
 
 
 	print("Finish...")
@@ -101,71 +138,56 @@ def main():
 					print("K_LEFT")
 					sx = -50
 					sy = 0
-					xv, yv = MoveDefender(xv, yv, sx, sy)
-					if(xv-sx == xr and yv == yr):
-						personajeRojo(xr,yr)
-					personajeVerde(xv,yv)
+					datos[1][0], datos[1][1] = MoveDefender(datos[1][0], datos[1][1], sx, sy)
 				elif event.key == pygame.K_RIGHT:
 					print("K_RIGHT")
 					sx = 50
 					sy = 0
-					xv, yv = MoveDefender(xv, yv, sx, sy)
-					if(xv-sx == xr and yv == yr):
-						personajeRojo(xr,yr)
-					personajeVerde(xv,yv)
+					datos[1][0], datos[1][1] = MoveDefender(datos[1][0], datos[1][1], sx, sy)
 				elif event.key == pygame.K_UP :
 					print("K_UP")
 					sx = 0
 					sy = 50
-					xv, yv = MoveDefender(xv, yv, sx, sy)
-					if(xv == xr and yv - sy== yr):
-						personajeRojo(xr,yr)
-					personajeVerde(xv,yv)
+					datos[1][0], datos[1][1] = MoveDefender(datos[1][0], datos[1][1], sx, sy)
 				elif event.key == pygame.K_DOWN :
 					print("K_DOWN")
 					sx = 0
 					sy = -50
-					xv, yv = MoveDefender(xv, yv, sx, sy)
-					if(xv == xr and yv - sy== yr):
-						personajeRojo(xr,yr)
-					personajeVerde(xv,yv)
+					datos[1][0], datos[1][1] = MoveDefender(datos[1][0], datos[1][1], sx, sy)
 				elif event.key == pygame.K_a :
 					print("K_a")
 					sx = -50
 					sy = 0
-					xr, yr = MoveDefender(xr, yr, sx, sy)
-					if(xv == xr-sx and yv == yr):
-						personajeVerde(xv,yv)
-					personajeRojo(xr,yr)
+					datos[0][0], datos[0][1] = MoveDefender(datos[0][0], datos[0][1], sx, sy)
 				elif event.key == pygame.K_d:
 					print("K_d")
 					sx = 50
 					sy = 0
-					xr, yr = MoveDefender(xr, yr, sx, sy)
-					if(xv == xr-sx and yv == yr):
-						personajeVerde(xv,yv)
-					personajeRojo(xr,yr)
+					datos[0][0], datos[0][1] = MoveDefender(datos[0][0], datos[0][1], sx, sy)
 				elif event.key == pygame.K_w :
 					print("K_w")
 					sx = 0
 					sy = 50
-					xr, yr = MoveDefender(xr, yr, sx, sy)
-					if(xv == xr and yv == yr-sy):
-						personajeVerde(xv,yv)
-					personajeRojo(xr,yr)
+					datos[0][0], datos[0][1] = MoveDefender(datos[0][0], datos[0][1], sx, sy)
 				elif event.key == pygame.K_s :
 					print("K_s")
 					sx = 0
 					sy = -50
-					xr, yr = MoveDefender(xr, yr, sx, sy)
-					if(xv == xr and yv == yr-sy):
-						personajeVerde(xv,yv)
-					personajeRojo(xr,yr)
+					datos[0][0], datos[0][1] = MoveDefender(datos[0][0], datos[0][1], sx, sy)
 				elif event.key == pygame.K_m :
 					print("K_m")
-					bomba(xv,yv)
-					glFlush()
-
+					explocion( datos[3][0], datos[3][1] , datos)
+					limpiar_explo( datos[3][0], datos[3][1] )
+					datos[3][0]=datos[1][0]
+					datos[3][1]=datos[1][1]
+				elif event.key == pygame.K_f :
+					print("K_f")
+					explocion( datos[2][0], datos[2][1], datos)
+					limpiar_explo( datos[2][0], datos[2][1] )
+					datos[2][0]=datos[0][0]
+					datos[2][1]=datos[0][1]
+				Refresh(datos)
+				
 			
 #cambio123456
 
