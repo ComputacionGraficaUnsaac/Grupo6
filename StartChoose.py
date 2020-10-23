@@ -8,7 +8,9 @@ from pygame.locals import *
 import math
 import random as rdn
 import numpy as np
-
+import main
+import threading
+import time
 #algoritmo para traslacion
 def reflexion(vertices,x,y):
     
@@ -347,6 +349,9 @@ def Choose(sx,sy):
     clearCanvas()
     marco(v)
     puntero(sx,sy-21)
+    Presentacion()
+    personajeVerde(-20, 0)
+    personajeRojo(20, 0)
 def moveImage(x,y,sx,sy,size):
     clearCanvas()
     vertices=traslate([[x,y,1]],sx,sy)
@@ -356,7 +361,7 @@ def moveImage(x,y,sx,sy,size):
     pygame.display.flip()
     return x,y
             
-def main():
+def main1():
     scale = 1
     width, height = scale * 400, scale * 400
 
@@ -372,14 +377,17 @@ def main():
     pygame.display.flip()
 
     marcador=-1
+    Presentacion()
+    personajeVerde(-20, 0)
+    personajeRojo(20, 0)
 
-    while True:
-        Presentacion()
-        personajeVerde(-20, 0)
-        personajeRojo(20, 0)
+    cicle=True
+
+    while cicle==True:
+        
         for event in pygame.event.get():
             if event.type == QUIT:
-                return
+                cicle==False
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_a:
                     
@@ -407,10 +415,69 @@ def main():
                 elif event.key==pygame.K_SPACE:
                     if marcador==0:
                         print("select VERDE")
+                        cicle=False
                     elif marcador==1:
                         print("select ROJO")
+                        cicle=False
                     elif marcador==2:
                         print("exit")
-                
+                        cicle=False
+    return cicle,marcador
+    #    print("hola")
+    #if cicle==False:
+    #    main.main()
+    '''while cicle==False:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_a:
+                    main.main()
+       '''
+def hilo_nombre(name):
+    global A
+    v,marca=main1()
+    A=marca
+    if v==False:
+        print("El hilo: ",name,"ha terminado")
+        pygame.quit()
+        sys.exit()
+    
+    #for i in range(0,10,1):
+    #    print(i," ",name)
+        #time.sleep(0.5)
+def juego(name):
+    global A
+    if A==0:
+        main.mainV()
+    else:
+        if A==1:
+            main.mainR()
+    
+A=0
+def hilo_main():
+    hilo1=threading.Thread(target=hilo_nombre,args=("hilo inicial",))
+    hilo2=threading.Thread(target=juego,args=("hilo juego",))
+    hilo1.start()
+    hilo1.join()
+    hilo2.start()
 
-main()
+
+hilo_main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
