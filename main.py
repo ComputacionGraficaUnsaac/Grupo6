@@ -35,9 +35,21 @@ def explocion(xc, yc, datos):
 	R=False
 	V=False
 	if(xc == datos[0][0] or yc == datos[0][1]):
-		R=True
+		if (xc == datos[0][0] and yc == datos[0][1]):
+			R=True
+		else:
+			if(xc == datos[0][0] and abs(posx) == 50):
+				R=True
+			if(yc == datos[0][1] and abs(posy) == 50):
+				R=True
 	if(xc == datos[1][0] or yc == datos[1][1]):
-		V=True
+		if (xc == datos[1][0] and yc == datos[1][1]):
+			V=True
+		else:
+			if(xc == datos[1][0] and abs(posx) == 50):
+				V=True
+			if(yc == datos[1][1] and abs(posy) == 50):
+				V=True
 	if(R or V):
 		if(R and V):
 			print("no winner")
