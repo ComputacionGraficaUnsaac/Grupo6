@@ -1,3 +1,9 @@
 07Oct - nada
 14Oct - presentacion de idea de juego
 23Oct - corre el juego. paralelizan. adecuaron sus necesidades al tiempo. (pendiente revisión de Github). Tienen menu de inicio.
+
+28Oct -  no hubo más mejoras
+
+30OCT:
+no poner rar en GitHub
+no tienen README!
